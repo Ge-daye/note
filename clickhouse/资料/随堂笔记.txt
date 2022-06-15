@@ -1,0 +1,87 @@
+
+ClickHouse各文件目录：
+    bin/    ===>  /usr/bin/ 
+    conf/   ===>  /etc/clickhouse-server/
+    lib/    ===>  /var/lib/clickhouse 
+    log/    ===>  /var/log/clickhouse-server
+
+
+PartitionId_MinBlockNum_MaxBlockNum_Level
+分区值_最小分区块编号_最大分区块编号_合并层级
+    =》PartitionId
+        数据分区ID生成规则
+        数据分区规则由分区ID决定，分区ID由PARTITION BY分区键决定。根据分区键字段类型，ID生成规则可分为：
+            未定义分区键
+                没有定义PARTITION BY，默认生成一个目录名为all的数据分区，所有数据均存放在all目录下。
+
+            整型分区键
+                分区键为整型，那么直接用该整型值的字符串形式做为分区ID。
+
+            日期类分区键
+                分区键为日期类型，或者可以转化成日期类型。
+
+            其他类型分区键
+                String、Float类型等，通过128位的Hash算法取其Hash值作为分区ID。
+    =》MinBlockNum
+        最小分区块编号，自增类型，从1开始向上递增。每产生一个新的目录分区就向上递增一个数字。
+    =》MaxBlockNum
+        最大分区块编号，新创建的分区MinBlockNum等于MaxBlockNum的编号。
+    =》Level
+        合并的层级，被合并的次数。合并次数越多，层级值越大。
+        
+        
+bin文件：数据文件
+mrk文件：标记文件
+    标记文件在 idx索引文件 和 bin数据文件 之间起到了桥梁作用。
+    以mrk2结尾的文件，表示该表启用了自适应索引间隔。
+primary.idx文件：主键索引文件，用于加快查询效率。
+minmax_create_time.idx：分区键的最大最小值。
+checksums.txt：校验文件，用于校验各个文件的正确性。存放各个文件的size以及hash值。
+
+
+
+实现高性能update或delete的思路：
+create table  A
+(
+a xxx,
+b xxx,
+c xxx,
+_sign UInt8,
+_version UInt32
+)
+
+==> 更新 ：  插入一条新的数据，   _version + 1 
+    =》 查询的时候加上一个过滤条件，  where version最大
+
+==> 删除： _sign,   0表示未删除，1表示已删除， 同时 version + 1
+    =》 查询的时候加上一个过滤条件， where  _sign=0 and version最大
+    
+==> 时间久了，数据膨胀了 ==》 类似合并机制，怎么把过期数据清除掉
+
+
+
+
+with rollup\with cube\with total
+
+维度是a,b
+rollup：上卷  
+      group by 
+      group by a 
+      group by a,b 
+cube：多维分析
+      group by  a,b 
+      group by  a
+      group by  b 
+      group by 
+total：总计
+      group by  a,b 
+      group by 
+
+
+select xxxx  from xxx  group by a,b 
+union all
+select xxxx  from xxx  group by a
+union all
+select xxxx  from xxx  group by b 
+union all
+select xxxx  from xxx  
