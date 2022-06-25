@@ -80,7 +80,7 @@ public class Swagger2Configuration {
 
 ```
 
-![image-20220622103544541](C:\Users\Admin\Pictures\typora\image-20220622103544541.png)
+![image-20220622103544541](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/image-20220622103544541.png)
 
 > 自定义配置的具体效果如上图所示。
 
@@ -96,7 +96,7 @@ public class Swagger2Configuration {
 
 如:`@Api(tags = "用户模块")`
 
-![image-20220622101555743](C:\Users\Admin\Pictures\typora\image-20220622101555743.png)
+![image-20220622101555743](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/image-20220622101555743.png)
 
 **常用属性**
 
@@ -116,7 +116,7 @@ public class Swagger2Configuration {
 
 如：` @ApiOperation(value = "欢迎用户",notes = "这是描述信息，告诉前端一些注意事项")`
 
-![image-20220622103258601](C:\Users\Admin\Pictures\typora\image-20220622103258601.png)
+![image-20220622103258601](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/image-20220622103258601.png)
 
 **常用属性：**
 
@@ -131,7 +131,7 @@ public class Swagger2Configuration {
 
 如：`@ApiImplicitParam(name = "username",value = "用户名")`
 
-![image-20220622104015628](C:\Users\Admin\Pictures\typora\image-20220622104015628.png)
+![image-20220622104015628](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/image-20220622104015628.png)
 
 **常用属性：**
 
@@ -154,7 +154,7 @@ public class Swagger2Configuration {
 )
 ```
 
-![image-20220622105346045](C:\Users\Admin\Pictures\typora\image-20220622105346045.png)
+![image-20220622105346045](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/image-20220622105346045.png)
 
 #### 4.6、@ApiModel()
 
@@ -164,9 +164,9 @@ public class Swagger2Configuration {
 
 如：`@ApiModel(value = "用户对象",description = "user entity")`
 
-![image-20220622104817548](C:\Users\Admin\Pictures\typora\image-20220622104817548.png)
+![image-20220622104817548](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/image-20220622104817548.png)
 
-![image-20220622104856198](C:\Users\Admin\Pictures\typora\image-20220622104856198.png)
+![image-20220622104856198](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/image-20220622104856198.png)
 
 #### 4.7、@ApiModelProperty
 
@@ -174,14 +174,14 @@ public class Swagger2Configuration {
 
 如：`@ApiModelProperty(name = "userId",value = "用户的id")`
 
-![image-20220622105715352](C:\Users\Admin\Pictures\typora\image-20220622105715352.png)
+![image-20220622105715352](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/image-20220622105715352.png)
 
 ## 5、版本2.9.2的一个Bug
 
 Springfox2.9.2使用的是swagger-annotatios1.5.20和swagger-models1.5.20。这个版本在使用@ApiModelProperty时如果修饰的实体的整数属性时会有Bug。建议升级到1.5.22版本。见第2节中的依赖代码。
 
-![image-20220622095001416](C:\Users\Admin\Pictures\typora\image-20220622095001416.png)
+![image-20220622095001416](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/image-20220622095001416.png)
 
-![image-20220622095044264](C:\Users\Admin\Pictures\typora\image-20220622095044264.png)
+![image-20220622095044264](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/image-20220622095044264.png)
 
-![image-20220622133841094](C:\Users\Admin\Pictures\typora\image-20220622133841094.png)
+![image-20220622133841094](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/image-20220622133841094.png)
