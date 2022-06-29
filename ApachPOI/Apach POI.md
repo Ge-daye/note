@@ -18,7 +18,7 @@ Apache POI是用 Java 编写的免费开源的跨平台的 Java API，Apache POI
 >
 > 它们的关系是依次包含的，前者包括后者
 
-![image-20220610150006243](C:\Users\葛浩东\Pictures\typora图片\image-20220610150006243.png)
+![image-20220629103857661](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/excel%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84.png)
 
 #### Excel2003版本和2007版本的区别
 
@@ -96,7 +96,7 @@ public void testHSSFWorkbook() throws IOException {
 
 生成的表格如下：
 
-![image-20220610154149292](C:\Users\葛浩东\Pictures\typora图片\image-20220610154149292.png)
+![image-20220629104027356](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/poi%E7%94%9F%E6%88%90%E7%9A%84excel03.png)
 
 
 
@@ -110,34 +110,38 @@ public void testHSSFWorkbook() throws IOException {
 
 ```java
 /**
- * 测试07版本的excel
- */
+     * 测试07版本的excel
+     */
 @Test
-public void testX() throws IOException {
-
+public void test2() throws IOException {
+    //创建工作簿
     Workbook workbook = new XSSFWorkbook();
+    //创建工作表
+    Sheet sheet1 = workbook.createSheet("sheet1");
+    Row row1 = sheet1.createRow(0);
+    Cell cell = row1.createCell(0);
+    cell.setCellValue("姓名");
+    Cell cell1 = row1.createCell(1);
+    cell1.setCellValue("学校名称");
 
-    Sheet sheet1 = workbook.createSheet("工作表1");
-    sheet1.createRow(0).createCell(0).setCellValue("姓名");
-    sheet1.createRow(0).createCell(1).setCellValue("学校名称");
+    Row row2 = sheet1.createRow(1);
+    Cell cell2 = row2.createCell(0);
+    cell2.setCellValue("王二");
+    Cell cell3 = row2.createCell(1);
+    cell3.setCellValue("Peking University");
 
-    sheet1.createRow(1).createCell(0).setCellValue("王二");
-    sheet1.createRow(1).createCell(1).setCellValue("Peking University");
-
-    FileOutputStream fileOutputStream = new FileOutputStream("E:\\linshi\\HandleExcel\\poi\\src\\" + "人员信息表07版.xlsx");
+    FileOutputStream fileOutputStream = new FileOutputStream("E:\\JavaSource\\poi\\src\\main\\resources\\" + "人员信息表07版.xlsx");
     workbook.write(fileOutputStream);
 }
 ```
 
-![image-20220610161355204](C:\Users\葛浩东\Pictures\typora图片\image-20220610161355204.png)
+![](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/poi生成的excel07.png)
 
 #### 大数据量写时间比较：
 
 当数据量比较大的时候 ，有两个工作簿类可以选择：一是普通的`XSSFWorkbook` ，二是`SXSSFWorkbook`。我们先通过一个多数据量的插入来比较两者需要的时间。大数据量的插入结果如下图。
 
-<img src="C:\Users\葛浩东\Pictures\typora图片\image-20220610162118350.png" alt="image-20220610162118350" style="zoom: 67%;" />
-
-
+![image-20220629150005387](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/Excel%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%87%8F%E5%86%99%E5%85%A5%E6%B5%8B%E8%AF%95.png)
 
 ```java
 /**
@@ -165,9 +169,7 @@ public void testInsertBigData1() throws IOException {
 }
 ```
 
-![image-20220610162946530](C:\Users\葛浩东\Pictures\typora图片\image-20220610162946530.png)
-
-
+![](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/XSSFWorkBook写入大数据量.png)
 
 ```java
 /**
@@ -198,7 +200,7 @@ public void testInsertBigData2() throws IOException {
 }
 ```
 
-![image-20220610162906479](C:\Users\葛浩东\Pictures\typora图片\image-20220610162906479.png)
+![image-20220629150300863](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/XSSFWorkBook%E5%BF%AB%E9%80%9F%E5%86%99%E5%85%A5%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%87%8F.png)
 
 #### SXSSFWorkbook
 
@@ -219,42 +221,52 @@ SXSSFWorkbook专门处理大数据，对于大型excel的创建且不会内存�
 
 下面关于读数据的操作基于下面这个样例表。
 
-![image-20220614205051411](C:\Users\葛浩东\Pictures\typora图片\image-20220614205051411.png)
+![image-20220629150448373](C:\Users\Admin\Pictures\typora\poi测试样例表.png)
 
 #### 4.1直接读取
 
 一般读取时指事先已经清楚每个单元格的数据类型。而且读取时不做非空判断。
 
 ```java
+/**
+     * 普通读数据
+     * 已知数据类型
+     * @throws IOException
+     */
 @Test
-public void simpleReadTest() throws IOException {
-   InputStream inputStream = new FileInputStream("E:\\linshi\\HandleExcel\\poi\\src\\样例表.xlsx");
-   Workbook workbook = new XSSFWorkbook(inputStream);
-   Sheet sheet = workbook.getSheet("student");
-   //获取第二行
-   Row row = sheet.getRow(1);
-   //获取姓名
-   String name = row.getCell(0).getStringCellValue();
-   //获取年龄
-   int age = (int)row.getCell(1).getNumericCellValue();
+public void test() throws IOException {
+    InputStream inputStream = new FileInputStream("E:\\JavaSource\\poi\\src\\main\\resources\\样例表.xlsx");
+    Workbook workbook = new XSSFWorkbook(inputStream);
+    Sheet sheet = workbook.getSheet("student");
+    //获取第二行
+    Row row = sheet.getRow(1);
+    //获取序号
+    int num = (int)row.getCell(0).getNumericCellValue();
+    //获取姓名
+    String name = row.getCell(1).getStringCellValue();
+    //获取年龄
+    int age = (int)row.getCell(2).getNumericCellValue();
 
-   //获取身高
-   double height = row.getCell(2).getNumericCellValue();
-   //获取住址
-   String address = row.getCell(3).getStringCellValue();
-   //是否毕业
-   boolean graduation = row.getCell(4).getBooleanCellValue();
-   //生日
-   Date birth = row.getCell(5).getDateCellValue();
+    //获取身高
+    double height = row.getCell(3).getNumericCellValue();
+    //获取住址
+    String address = row.getCell(4).getStringCellValue();
+    //是否毕业
+    boolean graduation = row.getCell(5).getBooleanCellValue();
+    //生日
+    Date birth = row.getCell(6).getDateCellValue();
 
-   System.out.println(name);
-   System.out.println(age);
-   System.out.println(height);
-   System.out.println(address);
-   System.out.println(graduation);
-   System.out.println(birth);
+    System.out.println(num);
+    System.out.println(name);
+    System.out.println(age);
+    System.out.println(height);
+    System.out.println(address);
+    System.out.println(graduation);
+    System.out.println(birth);
 }
 ```
+
+![image-20220629151909800](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/POI%E8%AF%BB%E5%8F%96%E4%B8%80%E8%A1%8C%E6%95%B0%E6%8D%AE.png)
 
 > 可能存在的问题：
 >
@@ -298,7 +310,7 @@ public void readPro() throws Exception{
 }
 ```
 
-读取一行数据，并封装
+读取一行数据，并封装为List集合
 
 ```java
 public static List<String> readOneRow(Sheet sheet, int rowNumber){
@@ -346,9 +358,34 @@ public static List<String> readOneRow(Sheet sheet, int rowNumber){
 
 
 
-## 其他
+## 5、POI中的元素是否是单例的吗？
 
-#### POI中的元素是否是单例的
+先看一个写数据时的问题
+
+![image-20220629173922557](C:\Users\Admin\Pictures\typora\POI写入数据的问题.png)
+
+![image-20220629173829997](C:\Users\Admin\Pictures\typora\image-20220629173829997.png)
+
+> 原因分析：
+>
+> 在写入数据的时候，两次创建了第一行`sheet1.createRow(0)`和第二行`sheet1.createRow(1)`
+>
+> 在第二次创建的Row会覆盖掉第一次的。因此（0,0）和(1,0)坐标的数据会丢失。
+>
+> 下面代码的会解决上面的问题：
+>
+> ```java
+> //在第二次时改为get获取，而不是创建
+>     sheet1.createRow(0).createCell(0).setCellValue("姓名");
+>     sheet1.geteRow(0).createCell(1).setCellValue("学校名称");
+> 
+>     sheet1.createRow(1).createCell(0).setCellValue("tom");
+>     sheet1.geteRow(1).createCell(1).setCellValue("HFUU");
+> ```
+
+
+
+**测试创建同名的Sheet**
 
 ```java
 @Test
@@ -360,10 +397,31 @@ public void testSingle(){
 }
 ```
 
-![image-20220610172214922](C:\Users\葛浩东\Pictures\typora图片\image-20220610172214922.png)
+![image-20220629174807042](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/image-20220629174807042.png)
 
-几篇参考文章：
+> 会直接抛出异常。提示同名的Sheet工作表已经存在
 
-https://blog.csdn.net/K_520_W/article/details/84404652
 
-https://juejin.cn/post/6844904024500600839
+
+**测试创建同名的Row和Cell**
+
+```java
+@Test
+public void test3(){
+    Workbook workbook = new XSSFWorkbook();
+    Sheet sheet = workbook.createSheet("aaa");
+    Row row = sheet.createRow(0);
+    Row row1 = sheet.createRow(0);
+    System.out.println(row==row1);
+
+    Cell cell = row.createCell(0);
+    Cell cell2 = row.createCell(0);
+    System.out.println(cell==cell2);
+}
+```
+
+![image-20220629175822516](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/image-20220629175822516.png)
+
+**说明**
+
+从上面的两个例子来看，Sheet能保证单例，但Row和Cell不是单例的。
