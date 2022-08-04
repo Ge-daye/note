@@ -8,7 +8,9 @@ springfox-swagger-ui 是对 swagger-ui 的封装，使得其可以使用 Spring 
 
 总的来说就是在spring开发环境下，需要引入springfox相关依赖
 
-## 2、引入依赖
+## 2、快速入门
+
+### 2.1、引入依赖
 
 这里使用了springfox2.9.2,但是排除了其中的两个依赖，具体后面会介绍到。
 
@@ -49,7 +51,7 @@ springfox-swagger-ui 是对 swagger-ui 的封装，使得其可以使用 Spring 
 </dependency>
 ```
 
-## 3、添加配置
+### 2.2、添加配置
 
 使用swagger前，需要对其进行自定义配置。在容器中创建一个 `Docket` 的Bean对象
 
@@ -83,6 +85,37 @@ public class Swagger2Configuration {
 ![image-20220622103544541](https://geda-1302176138.cos.ap-nanjing.myqcloud.com/imags/image-20220622103544541.png)
 
 > 自定义配置的具体效果如上图所示。
+
+
+
+## 3、新版SpringBoot造成的错误
+
+如果SpringBoot环境是2.6.X以上，使用swagger会在启动项目的时候报下面这个异常：
+
+```
+`org.springframework.context.ApplicationContextException: Failed to start bean 'documentationPluginsBootstrapper'; nested exception is java.lang.NullPointerException`
+```
+
+**原因:**
+
+Springboot2.6以后将SpringMVC 默认路径匹配策略从AntPathMatcher 更改为PathPatternParser，导致出错
+
+**解决方案：**
+
+在配置文件application.properties中加入以下配置
+
+```properties
+spring.mvc.pathmatch.matching-strategy=ANT_PATH_MATCHER
+```
+
+如果是application.yml就加入
+
+```yaml
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+```
 
 ## 4、常用注解
 
